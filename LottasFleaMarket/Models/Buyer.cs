@@ -4,6 +4,7 @@ using LottasFleaMarket.Interfaces;
 
 namespace LottasFleaMarket.Models {
     class Buyer : Person, IMarketObserver {
+        
         public Buyer(string name, decimal money) : base(name, money) {
             Market.GetInstance().Observe(this);
         }
@@ -13,8 +14,11 @@ namespace LottasFleaMarket.Models {
         }
 
         public void OnNext(Seller seller, Item item) {
+            
             if (!IsInteresting(item)) return;
+            
             Thread.Sleep(new Random().Next(100, 500));
+            
             if (seller.BuyItem(item)) {
                 var tabs = "                    ";
                 Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
