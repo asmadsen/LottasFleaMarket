@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LottasFleaMarket", "LottasFleaMarket\LottasFleaMarket.csproj", "{89BD118F-D729-459D-873B-B7BEE028EEC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LottasFleaMarketTest", "LottasFleaMarketTest\LottasFleaMarketTest.csproj", "{6DA08A31-6C38-4F5B-98F2-73BC2D005718}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89BD118F-D729-459D-873B-B7BEE028EEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89BD118F-D729-459D-873B-B7BEE028EEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89BD118F-D729-459D-873B-B7BEE028EEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89BD118F-D729-459D-873B-B7BEE028EEC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DA08A31-6C38-4F5B-98F2-73BC2D005718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA08A31-6C38-4F5B-98F2-73BC2D005718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA08A31-6C38-4F5B-98F2-73BC2D005718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA08A31-6C38-4F5B-98F2-73BC2D005718}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

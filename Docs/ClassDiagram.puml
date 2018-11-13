@@ -1,0 +1,43 @@
+@startuml
+
+interface Observer {
+    +Void notify()
+}
+
+abstract class Person {
+    +UUID id
+    +String name
+    #List<Item> belongings
+    #Decimal money
+}
+
+class Buyer extends Person implements Observer {
+    +Void BuyItemsOnMarket
+}
+
+class Seller extends Person {
+    +Void PublishItem()
+    +Boolean BuyItem(Item item)
+}
+
+class Item {
+    +UUID id
+    +Decimal price
+    +Person owner
+}
+
+
+class Market {
+    -Set<Observer> observers
+    +Map<Seller, List<Item>> itemsForSale
+    +{static} Market GetInstance()
+    +void PublishItem(Item item)
+}
+
+Person o-- Item 
+
+Market o-- Seller 
+Market o-- Item 
+Market o-- Observer 
+
+@enduml

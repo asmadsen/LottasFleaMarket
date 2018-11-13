@@ -1,0 +1,7 @@
+@startuml
+Seller -> Market: Puts item up for sale
+Buyer -> Market: Looks for items to buy
+
+Buyer -> Seller: Buys item
+Seller --> Market: Removes item from market
+@enduml

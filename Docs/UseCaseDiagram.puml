@@ -1,0 +1,19 @@
+@startuml
+:Seller: as Seller
+
+rectangle Market {
+    (Use the application) as (Use)
+    (Put item up for sale) as (sell)
+    (Remove item from market) as (sold)
+    (Look for new items) as (observe)
+    (sell) ..> (Use) : include
+    (sold) ..> (Use) : include
+    (observe) ..> (Use) : include
+}
+
+User -up-> (Use)
+
+Seller -up-> (Use)
+
+
+@enduml
