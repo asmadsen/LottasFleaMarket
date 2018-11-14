@@ -4,29 +4,27 @@ using LottasFleaMarket.Interfaces;
 
 namespace LottasFleaMarket.Models {
     class Buyer : Person, IMarketObserver {
-        
         public Buyer(string name, decimal money) : base(name, money) {
             Market.GetInstance().Observe(this);
         }
 
-        public void OnCompleted() {
-            throw new NotImplementedException();
-        }
-
         public void OnNext(Seller seller, Item item) {
-            
             if (!IsInteresting(item)) return;
-            
-            Thread.Sleep(new Random().Next(100, 500));
-            
-            if (seller.BuyItem(item)) {
-                var tabs = "                    ";
-                Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
+            if (!seller.BuyItem(item)) return;
+            const string tabs = "                    ";
+            Console.WriteLine(
+                $"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
+            lock (this) {
                 Belongings.Add(item);
+                Money -= item.Price;
             }
         }
 
-        private Boolean IsInteresting(Item value) {
+        private bool IsInteresting(Item value) {
+            lock (this) {
+                if (Money < value.Price) return false;
+            }
+
             return true;
         }
 

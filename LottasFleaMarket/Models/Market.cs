@@ -24,15 +24,19 @@ namespace LottasFleaMarket.Models {
         }
 
         public void PublishItem(Seller seller, Item item) {
-            if (!_itemsForSale.ContainsKey(seller)) {
-                _itemsForSale.Add(seller, new HashSet<Item>());
+            lock (this) {
+                if (!_itemsForSale.ContainsKey(seller)) {
+                    _itemsForSale.Add(seller, new HashSet<Item>());
+                }
             }
             Console.WriteLine($"{seller.Name} is selling their #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
 
             var items = _itemsForSale.GetValueOrDefault(seller);
             items.Add(item);
             
-            _observers.ToList().ForEach(observer => new Thread(() => observer.OnNext(seller, item)).Start());
+            _observers.ToList().ForEach(observer => new Thread(() => {
+                observer.OnNext(seller, item);
+            }).Start());
         }
 
         public void Observe(IMarketObserver observer) {
