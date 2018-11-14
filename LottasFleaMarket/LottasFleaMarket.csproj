@@ -9,8 +9,4 @@
       <PackageReference Include="Bogus" Version="24.3.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Interfaces\Decorators" />
-    </ItemGroup>
-
 </Project>

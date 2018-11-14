@@ -4,12 +4,12 @@ using Bogus;
 
 namespace LottasFleaMarket.Utils
 {
-    public abstract class PersonFactory
+    public class PersonGeneratorUtil
     {
         private static Faker _faker = new Faker();
         private static ISet<string> _names = new HashSet<string>();
         
-        protected string UniqueName() {
+        public static string UniqueName() {
             string name;
             do {
                 name = _faker.Name.FirstName();
@@ -19,7 +19,7 @@ namespace LottasFleaMarket.Utils
             return name;
         }
 
-        protected bool IsSmart()
+        public static bool IsSmart()
         {
             ThreadSafeRandom r = new ThreadSafeRandom();
             int iq = r.Next(0, 100);
@@ -27,7 +27,7 @@ namespace LottasFleaMarket.Utils
             return iq > 85;
         }
         
-        protected bool IsGreedy()
+        public static bool IsGreedy()
         {
             ThreadSafeRandom r = new ThreadSafeRandom();
             int greedyNess = r.Next(0, 100);

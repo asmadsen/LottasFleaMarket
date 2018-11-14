@@ -1,53 +1,72 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LottasFleaMarket.Decorators;
+using LottasFleaMarket.Interfaces.Decorators;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models {
     public class Seller : Person {
-        private ISet<Item> _upForSale = new HashSet<Item>();
+        private ISet<IItem> _ItemsListedForSale = new HashSet<IItem>();
 
-        public Boolean HasMoreItems => Belongings.Count > 0;
+        public Boolean HasMoreNotListedItems => ItemsNotYetListedForSale.Count > 0;
+        public decimal AmountSoldFor { get; protected set; }
+        public decimal InitialValueOfItems { get; set; }
 
-        public Seller(int numberOfBelongings = -1) : base(0) {
+        public Seller(int NumberOfItemsSellerStartWith = -1) : base(0)
+        {
+            
+            MakeSellersItemsReadyForSale(NumberOfItemsSellerStartWith);
+        }
+
+        private void MakeSellersItemsReadyForSale(int NumberOfItemsSellerStartWith)
+        {
             var random = new Random();
 
-            if (numberOfBelongings == -1) {
-                numberOfBelongings = random.Next(10, 30);
+            if (NumberOfItemsSellerStartWith == -1)
+            {
+                NumberOfItemsSellerStartWith = random.Next(10, 30);
             }
 
-            for (int i = 0; i < numberOfBelongings; i++) {
-                var price = new decimal(random.NextDouble()) * (10 * random.Next(1, 8));
-                Belongings.Add(new Item(i+1));
+            for (int i = 0; i < NumberOfItemsSellerStartWith; i++)
+            {
+                var ItemId = i + 1;
+                IItem item = new Item(ItemId);
+                item = new CollectorsDecorator(item);
+                
+
+                ItemsNotYetListedForSale.Add(item);
+                InitialValueOfItems += item.Category.Price;
             }
         }
 
         public void SellItems(int numberOfItemsToSell) {
-            if (numberOfItemsToSell > Belongings.Count) {
-                numberOfItemsToSell = Belongings.Count;
+            if (numberOfItemsToSell > ItemsNotYetListedForSale.Count) {
+                numberOfItemsToSell = ItemsNotYetListedForSale.Count;
             }
 
             numberOfItemsToSell--;
             var random = new ThreadSafeRandom();
 
-            var array = Belongings.ToArray();
+            var array = ItemsNotYetListedForSale.ToArray();
             while (numberOfItemsToSell >= 0 && array.Length > 0) {
                 var item = array[random.Next(0, numberOfItemsToSell)];
-                Belongings.Remove(item);
-                _upForSale.Add(item);
+                ItemsNotYetListedForSale.Remove(item);
+                _ItemsListedForSale.Add(item);
                 Market.GetInstance().PublishItem(this, item);
                 numberOfItemsToSell--;
-                array = Belongings.ToArray();
+                array = ItemsNotYetListedForSale.ToArray();
             }
         }
 
-        public bool BuyItem(Item item) {
+        public bool BuyItem(IItem item) {
             lock (item) {
-                if (!_upForSale.Contains(item)) return false;
+                if (!_ItemsListedForSale.Contains(item)) return false;
                 Market.GetInstance().UnPublishItem(this, item);
-                _upForSale.Remove(item);
+                _ItemsListedForSale.Remove(item);
+                AmountSoldFor += item.Price;
 
-                if (_upForSale.Count == 0 && Belongings.Count == 0) {
+                if (_ItemsListedForSale.Count == 0 && ItemsNotYetListedForSale.Count == 0) {
                     Console.WriteLine($"{Name} has sold all their items");
                 }
 

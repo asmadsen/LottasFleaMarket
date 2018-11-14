@@ -1,24 +1,25 @@
 using System;
 using System.Collections.Generic;
+using LottasFleaMarket.Interfaces.Decorators;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models {
-    public abstract class Person  : PersonFactory {
+    public abstract class Person {
         public readonly Guid Id;
         public readonly string Name;
-        public ISet<Item> Belongings;
-        public int NumberOfBelongings => Belongings.Count;
-        protected decimal Money;
+        public ISet<IItem> ItemsNotYetListedForSale;
+        public int NumberOfBelongings => ItemsNotYetListedForSale.Count;
+        public decimal Saldo;
         public bool IsSmart;
         public bool IsGreedy;
 
-        protected Person(decimal money) {
+        protected Person(decimal saldo) {
             Id = Guid.NewGuid();
-            Name = UniqueName();
-            IsSmart = IsSmart();
-            IsGreedy = IsGreedy();
-            Belongings = new HashSet<Item>();
-            Money = money;
+            Name = PersonGeneratorUtil.UniqueName();
+            IsSmart = PersonGeneratorUtil.IsSmart();
+            IsGreedy = PersonGeneratorUtil.IsGreedy();
+            ItemsNotYetListedForSale = new HashSet<IItem>();
+            Saldo = saldo;
         }
     }
 }

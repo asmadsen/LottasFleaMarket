@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using LottasFleaMarket.Interfaces;
+using LottasFleaMarket.Interfaces.Decorators;
 
 namespace LottasFleaMarket.Models {
     public class Market {
         private static readonly object _singletonLock = new object();
         private static Market _market;
         private ISet<IMarketObserver> _observers = new HashSet<IMarketObserver>();
-        private Dictionary<Seller, ISet<Item>> _itemsForSale = new Dictionary<Seller, ISet<Item>>();
+        private Dictionary<Seller, ISet<IItem>> _itemsForSale = new Dictionary<Seller, ISet<IItem>>();
 
         private Market() {
         }
@@ -23,13 +24,15 @@ namespace LottasFleaMarket.Models {
             }
         }
 
-        public void PublishItem(Seller seller, Item item) {
+        public void PublishItem(Seller seller, IItem item) {
+            
             lock (this) {
                 if (!_itemsForSale.ContainsKey(seller)) {
-                    _itemsForSale.Add(seller, new HashSet<Item>());
+                    _itemsForSale.Add(seller, new HashSet<IItem>());
                 }
             }
-            Console.WriteLine($"{seller.Name} is selling their #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
+            
+            Console.WriteLine("{0,-8} is selling item nr {1,2} in category {2,8} for {3,3}", seller.Name, item.SellerItemId, item.Category.Name.ToLower(), item.Price);
 
             var items = _itemsForSale.GetValueOrDefault(seller);
             items.Add(item);
@@ -50,7 +53,7 @@ namespace LottasFleaMarket.Models {
             _observers.Add(observer);
         }
 
-        public void UnPublishItem(Seller seller, Item item) {
+        public void UnPublishItem(Seller seller, IItem item) {
             if (_itemsForSale.ContainsKey(seller)) {
                 var items = _itemsForSale.GetValueOrDefault(seller);
                 items.Remove(item);

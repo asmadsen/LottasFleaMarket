@@ -9,8 +9,8 @@ namespace LottasFleaMarket.Models.Enums
     public class Category
     {
         public static readonly Category Fishing = new Category("Fishing", 40);
-        public static readonly Category Shoes = new Category("Shoes", 40);
-        public static readonly Category Nature = new Category("Nature", 30);
+        public static readonly Category Shoes = new Category("Shoes", 20);
+        public static readonly Category Nature = new Category("Nature", 50);
 
         public string Name { get; }
         public decimal Price { get; }

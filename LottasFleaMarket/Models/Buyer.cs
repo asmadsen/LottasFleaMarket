@@ -1,30 +1,54 @@
 using System;
 using System.Threading;
 using LottasFleaMarket.Interfaces;
+using LottasFleaMarket.Interfaces.Decorators;
 
 namespace LottasFleaMarket.Models {
-    class Buyer : Person, IMarketObserver {
-        public Buyer(decimal money) : base(money) {
+    public class Buyer : Person, IMarketObserver
+    {
+
+        public decimal AmountUsed { get; protected set; }
+
+
+        public Buyer(decimal saldo) : base(saldo) {
             Market.GetInstance().Observe(this);
         }
 
-        public void OnNext(Seller seller, Item item) {
+        public void OnNext(Seller seller, IItem item) {
             if (!IsInteresting(item)) return;
             if (!seller.BuyItem(item)) return;
             const string tabs = "                    ";
             Console.WriteLine(
                 $"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
-            lock (this) {
-                Belongings.Add(item);
-                Money -= item.Price;
+            lock (this)
+            {
+                BuyItem(item);
             }
         }
 
-        private bool IsInteresting(Item value) {
-            lock (this) {
-                if (Money < value.Price) return false;
-            }
+        private void BuyItem(IItem item)
+        {
+            ItemsNotYetListedForSale.Add(item);
+            Saldo -= item.Price;
+            AmountUsed += item.Price;
+            Thread.Sleep(500);
+        }
 
+        public bool IsInteresting(IItem item)
+        {
+            decimal listingPrice = item.Category.Price;
+            
+            lock (this) {
+                if (Saldo < item.Price) return false;
+                
+                if (!this.IsSmart)
+                {
+                    return true;
+                }
+
+                if (!(item.Price < listingPrice)) return false;
+                
+            }
             return true;
         }
 
@@ -35,5 +59,7 @@ namespace LottasFleaMarket.Models {
         public override int GetHashCode() {
             return Id.GetHashCode();
         }
+
+     
     }
 }
