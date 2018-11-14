@@ -9,7 +9,7 @@ namespace LottasFleaMarket.Models {
 
         public Boolean HasMoreItems => Belongings.Count > 0;
 
-        public Seller(string name, int numberOfBelongings = -1) : base(name, 0) {
+        public Seller(int numberOfBelongings = -1) : base(0) {
             var random = new Random();
 
             if (numberOfBelongings == -1) {
@@ -18,7 +18,7 @@ namespace LottasFleaMarket.Models {
 
             for (int i = 0; i < numberOfBelongings; i++) {
                 var price = new decimal(random.NextDouble()) * (10 * random.Next(1, 8));
-                Belongings.Add(new Item(i + 1, price));
+                Belongings.Add(new Item(this));
             }
         }
 

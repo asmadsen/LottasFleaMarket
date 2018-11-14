@@ -4,7 +4,7 @@ using LottasFleaMarket.Interfaces;
 
 namespace LottasFleaMarket.Models {
     class Buyer : Person, IMarketObserver {
-        public Buyer(string name, decimal money) : base(name, money) {
+        public Buyer(decimal money) : base(money) {
             Market.GetInstance().Observe(this);
         }
 
