@@ -13,41 +13,38 @@ namespace LottasFleaMarket {
    
         static void Main(string[] args) {
             
-            var numberOfBuyers = 100;
-            var numberOfSellers = 5;
-            var numberOfSellerBelongings = 200;
+            var numberOfBuyers = 10;
+            var numberOfSellers = 10;
+            var numberOfSellerBelongings = 20;
 
             var sellers = new List<Seller>();
             var buyers = new List<Buyer>();
 
-            Console.WriteLine("Buyers:");
-            
-            for (var i = 0; i < numberOfBuyers; i++) {
-                var buyer = new Buyer(1000);
-                buyers.Add(buyer);
-                Console.WriteLine($"{buyer.Name} is smart= {buyer.IsSmart}");
-            }
-
-            Console.WriteLine("");
-            Console.WriteLine("");
-            
-            Console.WriteLine("Sellers:");
-            
-            for (var i = 0; i < numberOfSellers; i++)
-            {
-                Seller seller = new Seller(numberOfSellerBelongings);
-                sellers.Add(seller);
-                Console.WriteLine($"{seller.Name} is smart= {seller.IsSmart}");
-            }
-            
-            Console.WriteLine("");
-            Console.WriteLine("");
+            PopulateSimulationWithSellersAndBuyers(numberOfBuyers, buyers, numberOfSellers, numberOfSellerBelongings, sellers);
 
             StartLoppemarked(sellers);
 
             printStatistics(sellers, buyers);
         }
-        
+
+        private static void PopulateSimulationWithSellersAndBuyers(int numberOfBuyers, List<Buyer> buyers, int numberOfSellers,
+            int numberOfSellerBelongings, List<Seller> sellers)
+        {
+            Console.WriteLine("Buyers:");
+
+            for (var i = 0; i < numberOfBuyers; i++)
+            {
+                var buyer = new Buyer(1000);
+                buyers.Add(buyer);
+            }
+
+            for (var i = 0; i < numberOfSellers; i++)
+            {
+                Seller seller = new Seller(numberOfSellerBelongings);
+                sellers.Add(seller);
+            }
+        }
+
         private static void StartLoppemarked(List<Seller> sellers)
         {
             var loopCount = 1;
@@ -83,26 +80,27 @@ namespace LottasFleaMarket {
             Console.WriteLine();
             
             Console.WriteLine("Sellers:");
-            Console.WriteLine("-----------------");
+            Console.WriteLine("");
+            Console.WriteLine("{0, -10} {1, -8} {2, -13} {3, -13} {4, -10}", "Name", "Smart","Items left", "Items Sold", "Total income");
+            Console.WriteLine("--------------------------------------------------------------");
             sellers.ForEach(s =>
             {
-                Console.WriteLine("{0, -9} has {1, -1} items left and sold items for ${2, -4}.", s.Name ,s.NumberOfBelongings, s.AmountSoldFor);
+                Console.WriteLine("{0, -10} {1, -12} {2, -13} {3, -13} ${4, -10}", s.Name , s.IsSmart, s.NumberOfBelongings, s._NumberOfItemsSellerStartWith-s.NumberOfBelongings ,s.AmountSoldFor);
                 
             });
             
             Console.WriteLine();
             
             Console.WriteLine("Buyers:");
-            Console.WriteLine("-----------------");
+            Console.WriteLine();
+            Console.WriteLine("{0, -10} {1, -8} {2, -13} {3, -13} {4, -10}", "Name", "Smart","Items Bought", "Money spent", "Bank Saldo");
+            Console.WriteLine("--------------------------------------------------------------");
             buyers.ForEach(b =>
             {
-                Console.WriteLine("{0, -9} bought {1,-3} items for the total value of {2,-4} and has {3,-2} left in the bank", b.Name, b.NumberOfBelongings, b.AmountUsed, b.Saldo);
+                Console.WriteLine("{0, -10} {1, -12} {2,-12} ${3, -13} ${4, -10}", b.Name, b.IsSmart, b.NumberOfBelongings, b.AmountUsed, b.Saldo);
                 
             });
             
         }
-
-        
-
     }
 }

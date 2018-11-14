@@ -10,12 +10,13 @@ namespace LottasFleaMarket.Models {
         private ISet<IItem> _ItemsListedForSale = new HashSet<IItem>();
 
         public Boolean HasMoreNotListedItems => ItemsNotYetListedForSale.Count > 0;
+        public int _NumberOfItemsSellerStartWith { get; set; }
         public decimal AmountSoldFor { get; protected set; }
         public decimal InitialValueOfItems { get; set; }
 
         public Seller(int NumberOfItemsSellerStartWith = -1) : base(0)
         {
-            
+            _NumberOfItemsSellerStartWith = NumberOfItemsSellerStartWith;
             MakeSellersItemsReadyForSale(NumberOfItemsSellerStartWith);
         }
 

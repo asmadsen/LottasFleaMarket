@@ -15,23 +15,25 @@ namespace LottasFleaMarket.Models {
         }
 
         public void OnNext(Seller seller, IItem item) {
+         
             if (!IsInteresting(item)) return;
             if (!seller.BuyItem(item)) return;
-            const string tabs = "                    ";
-            Console.WriteLine(
-                $"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
+            
             lock (this)
             {
-                BuyItem(item);
+                //Thread.Sleep(new Random().Next(100, 200));
+                BuyItem(item, seller);
             }
         }
 
-        private void BuyItem(IItem item)
+        private void BuyItem(IItem item, Seller seller)
         {
+            const string tabs = "                    ";
+            Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
             ItemsNotYetListedForSale.Add(item);
             Saldo -= item.Price;
             AmountUsed += item.Price;
-            Thread.Sleep(500);
+            
         }
 
         public bool IsInteresting(IItem item)
@@ -59,7 +61,6 @@ namespace LottasFleaMarket.Models {
         public override int GetHashCode() {
             return Id.GetHashCode();
         }
-
-     
+        
     }
 }

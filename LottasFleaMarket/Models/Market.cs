@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading;
 using LottasFleaMarket.Interfaces;
 using LottasFleaMarket.Interfaces.Decorators;
+using System.Drawing;
+using System.Threading.Tasks;
+using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models {
     public class Market {
@@ -36,7 +39,14 @@ namespace LottasFleaMarket.Models {
 
             var items = _itemsForSale.GetValueOrDefault(seller);
             items.Add(item);
-            
+
+            /*Parallel.ForEach(_observers.ToList(),
+                currentElement => new Thread(() =>
+                {
+                    currentElement.OnNext(seller, item);
+                        
+                }).Start());*/
+       
             _observers.ToList().ForEach(observer => new Thread(() => {
                 observer.OnNext(seller, item);
             }).Start());
