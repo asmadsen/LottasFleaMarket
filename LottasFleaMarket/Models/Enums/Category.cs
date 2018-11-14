@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace LottasFleaMarket.Models.Enums
@@ -8,8 +11,6 @@ namespace LottasFleaMarket.Models.Enums
         public static readonly Category Fishing = new Category("Fishing", 40);
         public static readonly Category Shoes = new Category("Shoes", 40);
         public static readonly Category Nature = new Category("Nature", 30);
-        private static List<Category> categories = new List<Category>();
-        
 
         public string Name { get; }
         public decimal Price { get; }
@@ -18,15 +19,22 @@ namespace LottasFleaMarket.Models.Enums
         {
             Name = name;
             Price = price;
-            
-            categories.Add(Fishing);
-            categories.Add(Shoes);
-            categories.Add(Nature);
         }
 
-        public static Category getCategory(int index)
+        public static Category GetCategory(string name)
         {
-            return categories[index];
+            var fields = typeof(Category).GetFields(BindingFlags.Static | BindingFlags.Public);
+            var field = fields.First(entry => String.Equals(entry.Name, name, StringComparison.CurrentCultureIgnoreCase));
+            if (field == null) {
+                return null;
+            }
+            return field.GetValue(null) as Category;
+        }
+
+        public static Category RandomCategory() {
+            var fields = typeof(Category).GetFields(BindingFlags.Static | BindingFlags.Public);
+            var index = new Random().Next(0, fields.Length - 1);
+            return fields[index].GetValue(null) as Category;
         }
     }
 }

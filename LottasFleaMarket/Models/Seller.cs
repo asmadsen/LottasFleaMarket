@@ -18,7 +18,7 @@ namespace LottasFleaMarket.Models {
 
             for (int i = 0; i < numberOfBelongings; i++) {
                 var price = new decimal(random.NextDouble()) * (10 * random.Next(1, 8));
-                Belongings.Add(new Item(this));
+                Belongings.Add(new Item(i+1));
             }
         }
 
