@@ -14,10 +14,10 @@ namespace LottasFleaMarket {
    
         static void Main(string[] args) {
             
-            var numberOfBuyers = 5;
-            var numberOfSellers = 5;
+            var numberOfBuyers = 50;
+            var numberOfSellers = 50;
             var numberOfSellerBelongings = 20;
-            var startBalanceBuyers = 1000;
+            var startBalanceBuyers = 10000;
 
             var sellers = new List<Seller>();
             var buyers = new List<Buyer>();
