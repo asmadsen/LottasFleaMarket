@@ -13,8 +13,8 @@ namespace LottasFleaMarket {
    
         static void Main(string[] args) {
             
-            var numberOfBuyers = 10;
-            var numberOfSellers = 10;
+            var numberOfBuyers = 50;
+            var numberOfSellers = 50;
             var numberOfSellerBelongings = 20;
 
             var sellers = new List<Seller>();
@@ -97,7 +97,7 @@ namespace LottasFleaMarket {
             Console.WriteLine("--------------------------------------------------------------");
             buyers.ForEach(b =>
             {
-                Console.WriteLine("{0, -10} {1, -12} {2,-12} ${3, -13} ${4, -10}", b.Name, b.IsSmart, b.NumberOfBelongings, b.AmountUsed, b.Saldo);
+                Console.WriteLine("{0, -10} {1, -12} {2,-12} ${3, -13} ${4, -10}", b.Name, b.IsSmart, b.NumberOfBelongings, b.AmountUsed, b.Balance);
                 
             });
             

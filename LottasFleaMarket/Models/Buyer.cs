@@ -10,7 +10,7 @@ namespace LottasFleaMarket.Models {
         public decimal AmountUsed { get; protected set; }
 
 
-        public Buyer(decimal saldo) : base(saldo) {
+        public Buyer(decimal balance) : base(balance) {
             Market.GetInstance().Observe(this);
         }
 
@@ -30,8 +30,8 @@ namespace LottasFleaMarket.Models {
         {
             const string tabs = "                    ";
             Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
-            ItemsNotYetListedForSale.Add(item);
-            Saldo -= item.Price;
+            Belongings.Add(item);
+            Balance -= item.Price;
             AmountUsed += item.Price;
             
         }
@@ -41,7 +41,7 @@ namespace LottasFleaMarket.Models {
             decimal listingPrice = item.Category.Price;
             
             lock (this) {
-                if (Saldo < item.Price) return false;
+                if (Balance < item.Price) return false;
                 
                 if (!this.IsSmart)
                 {

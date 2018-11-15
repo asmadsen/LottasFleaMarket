@@ -7,19 +7,19 @@ namespace LottasFleaMarket.Models {
     public abstract class Person {
         public readonly Guid Id;
         public readonly string Name;
-        public ISet<IItem> ItemsNotYetListedForSale;
-        public int NumberOfBelongings => ItemsNotYetListedForSale.Count;
-        public decimal Saldo;
+        public ISet<IItem> Belongings;
+        public int NumberOfBelongings => Belongings.Count;
+        public decimal Balance;
         public bool IsSmart;
         public bool IsGreedy;
 
-        protected Person(decimal saldo) {
+        protected Person(decimal balance) {
             Id = Guid.NewGuid();
             Name = PersonGeneratorUtil.UniqueName();
             IsSmart = PersonGeneratorUtil.IsSmart();
             IsGreedy = PersonGeneratorUtil.IsGreedy();
-            ItemsNotYetListedForSale = new HashSet<IItem>();
-            Saldo = saldo;
+            Belongings = new HashSet<IItem>();
+            Balance = balance;
         }
     }
 }

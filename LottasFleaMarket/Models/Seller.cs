@@ -9,7 +9,7 @@ namespace LottasFleaMarket.Models {
     public class Seller : Person {
         private ISet<IItem> _ItemsListedForSale = new HashSet<IItem>();
 
-        public Boolean HasMoreNotListedItems => ItemsNotYetListedForSale.Count > 0;
+        public Boolean HasMoreNotListedItems => Belongings.Count > 0;
         public int _NumberOfItemsSellerStartWith { get; set; }
         public decimal AmountSoldFor { get; protected set; }
         public decimal InitialValueOfItems { get; set; }
@@ -36,27 +36,27 @@ namespace LottasFleaMarket.Models {
                 item = new CollectorsDecorator(item);
                 
 
-                ItemsNotYetListedForSale.Add(item);
+                Belongings.Add(item);
                 InitialValueOfItems += item.Category.Price;
             }
         }
 
         public void SellItems(int numberOfItemsToSell) {
-            if (numberOfItemsToSell > ItemsNotYetListedForSale.Count) {
-                numberOfItemsToSell = ItemsNotYetListedForSale.Count;
+            if (numberOfItemsToSell > Belongings.Count) {
+                numberOfItemsToSell = Belongings.Count;
             }
 
             numberOfItemsToSell--;
             var random = new ThreadSafeRandom();
 
-            var array = ItemsNotYetListedForSale.ToArray();
+            var array = Belongings.ToArray();
             while (numberOfItemsToSell >= 0 && array.Length > 0) {
                 var item = array[random.Next(0, numberOfItemsToSell)];
-                ItemsNotYetListedForSale.Remove(item);
+                Belongings.Remove(item);
                 _ItemsListedForSale.Add(item);
                 Market.GetInstance().PublishItem(this, item);
                 numberOfItemsToSell--;
-                array = ItemsNotYetListedForSale.ToArray();
+                array = Belongings.ToArray();
             }
         }
 
@@ -67,7 +67,7 @@ namespace LottasFleaMarket.Models {
                 _ItemsListedForSale.Remove(item);
                 AmountSoldFor += item.Price;
 
-                if (_ItemsListedForSale.Count == 0 && ItemsNotYetListedForSale.Count == 0) {
+                if (_ItemsListedForSale.Count == 0 && Belongings.Count == 0) {
                     Console.WriteLine($"{Name} has sold all their items");
                 }
 
