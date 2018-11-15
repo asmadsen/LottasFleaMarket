@@ -17,6 +17,7 @@ namespace LottasFleaMarket.Models {
         public decimal Price => Category.Price;
 
         public Category Category { get;}
+        public Condition Condition => Condition.Used;
         public string Description => Category.Name;
     }
 }
