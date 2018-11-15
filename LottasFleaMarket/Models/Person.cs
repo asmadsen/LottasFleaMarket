@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using LottasFleaMarket.Interfaces.Decorators;
+using LottasFleaMarket.Models.Enums;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models
@@ -10,20 +11,22 @@ namespace LottasFleaMarket.Models
     {
         public readonly Guid Id;
         public readonly string Name;
-        public ISet<IItem> Belongings;
-        public int NumberOfBelongings => Belongings.Count;
+        public ISet<IItem> Belongings = new HashSet<IItem>();
+        public int NumberOfBelongings;
         public decimal Balance;
-        public bool IsSmart;
-        public bool IsGreedy;
+        public decimal InitialBalance;
 
-        protected Person(decimal balance)
+        protected Person(decimal balance, string name, ISet<IItem> belongings = null)
         {
             Id = Guid.NewGuid();
-            Name = PersonGeneratorUtil.UniqueName();
-            IsSmart = PersonGeneratorUtil.IsSmart();
-            IsGreedy = PersonGeneratorUtil.IsGreedy();
-            Belongings = new HashSet<IItem>();
+            Name = name;
             Balance = balance;
+        
+            if (belongings != null)
+            {
+                Belongings = belongings;
+            }
         }
+        public abstract Report GenerateReport();
     }
 }

@@ -2,27 +2,33 @@ using System;
 using System.Threading;
 using LottasFleaMarket.Interfaces;
 using LottasFleaMarket.Interfaces.Decorators;
+using LottasFleaMarket.Models.Enums;
 
 namespace LottasFleaMarket.Models {
-    public class Buyer : Person, IMarketObserver
-    {
-
+    public class Buyer : Person, IMarketObserver {
+        private readonly Action _unSubscribe;
         public decimal AmountUsed { get; protected set; }
-
-
-        public Buyer(decimal balance) : base(balance) {
-            Market.GetInstance().Subscribe(this);
+        public int NumberOfItemsBought { get; protected set; }
+       
+        public Buyer(decimal startBalance, string name) : base(startBalance, name) {
+            _unSubscribe = Market.GetInstance().Subscribe(this);
         }
 
         public void OnNext(Seller seller, IItem item) {
          
             if (!IsInteresting(item)) return;
-            if (!seller.BuyItem(item)) return;
             
             lock (this)
             {
+            if (!seller.BuyItem(item)) return;
+            
+            
                 //Thread.Sleep(new Random().Next(100, 200));
                 BuyItem(item, seller);
+            }
+
+            if (Balance == 0) {
+                _unSubscribe();
             }
         }
 
@@ -31,6 +37,7 @@ namespace LottasFleaMarket.Models {
             const string tabs = "                    ";
             Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
             Belongings.Add(item);
+            NumberOfItemsBought++;
             Balance -= item.Price;
             AmountUsed += item.Price;
             
@@ -43,12 +50,7 @@ namespace LottasFleaMarket.Models {
             lock (this) {
                 if (Balance < item.Price) return false;
                 
-                if (!this.IsSmart)
-                {
-                    return true;
-                }
-
-                if (!(item.Price < listingPrice)) return false;
+                //if (!(item.Price < listingPrice)) return false;
                 
             }
             return true;
@@ -61,6 +63,10 @@ namespace LottasFleaMarket.Models {
         public override int GetHashCode() {
             return Id.GetHashCode();
         }
-        
+
+        public override Report GenerateReport()
+        {
+            return new BuyerReport(this, NumberOfItemsBought, AmountUsed);
+        }
     }
 }

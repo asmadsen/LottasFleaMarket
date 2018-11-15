@@ -9,7 +9,7 @@ namespace LottasFleaMarketTest.Models
 {
     public class BuyerTest
     {
-        [Fact]
+        /*[Fact]
         public void shouldFindItemIntersting()
         {
             Item item = new Item(1);
@@ -80,5 +80,6 @@ namespace LottasFleaMarketTest.Models
 
             Assert.Equal(Buyer.IsInteresting(i), true);
         }
+    }*/
     }
 }

@@ -19,20 +19,6 @@ namespace LottasFleaMarket.Utils
             return name;
         }
 
-        public static bool IsSmart()
-        {
-            ThreadSafeRandom r = new ThreadSafeRandom();
-            int iq = r.Next(0, 100);
-
-            return iq > 85;
-        }
         
-        public static bool IsGreedy()
-        {
-            ThreadSafeRandom r = new ThreadSafeRandom();
-            int greedyNess = r.Next(0, 100);
-
-            return greedyNess > 70;
-        }
     }
 }

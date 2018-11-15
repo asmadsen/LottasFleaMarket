@@ -92,7 +92,7 @@ namespace LottasFleaMarket {
             +decimal MoneyMade
         }
         
-        abstract class Person  {
+        abstract class Person {
             +GUID id
             +string name
             #List<Item> Belongings
@@ -126,14 +126,14 @@ namespace LottasFleaMarket {
         }
         
         
-        class Market << (S,#FF7700) Singleton>> implements System.IObservable {
+        class Market << (S,#FF7700) Singleton>> {
             -{static} object _singletonLock
             -{static} Market _instance
             -Set<Observer> observers
             -Map<Seller, ISet<IItem>> _itemsForSale
             +{static} Market GetInstance()
             +void PublishItem(Seller seller, IItem item)
-            +void Observe(IMarketObserver observer)
+            +Action Subscrible(IMarketObserver observer)
             +void UnPublishItem(Seller seller, IItem item)
         }
         
@@ -143,10 +143,6 @@ namespace LottasFleaMarket {
         Market o-- LottasFleaMarket.Decorators.Interfaces.IItem 
         Market o-- LottasFleaMarket.Interfaces.IMarketObserver   
     }
-}
-
-interface System.IObservable<T> {
-    +IDisposable Subscribe(T observer)
 }
 
 @enduml

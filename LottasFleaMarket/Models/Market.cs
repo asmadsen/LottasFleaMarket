@@ -40,19 +40,14 @@ namespace LottasFleaMarket.Models {
             var items = _itemsForSale.GetValueOrDefault(seller);
             items.Add(item);
 
-            /*Parallel.ForEach(_observers.ToList(),
-                currentElement => new Thread(() =>
-                {
-                    currentElement.OnNext(seller, item);
-                        
-                }).Start());*/
        
             _observers.ToList().ForEach(observer => new Thread(() => {
                 observer.OnNext(seller, item);
             }).Start());
         }
 
-        public IDisposable Subscribe(IMarketObserver observer) {
+        public Action Subscribe(IMarketObserver observer) {
+
             if (_itemsForSale.Count > 0) {
                 foreach (var (seller, items) in _itemsForSale) {
                     foreach (var item in items) {
@@ -61,7 +56,12 @@ namespace LottasFleaMarket.Models {
                 }
             }
             _observers.Add(observer);
-            IDisposable
+
+            return () => {
+                if (_observers.Contains(observer)) {
+                    _observers.Remove(observer);
+                }
+            };
         }
 
         public void UnPublishItem(Seller seller, IItem item) {

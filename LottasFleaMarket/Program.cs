@@ -6,6 +6,7 @@ using System.Threading;
 using Bogus;
 using LottasFleaMarket.Models;
 using LottasFleaMarket.Models.Enums;
+using LottasFleaMarket.Models.Factories;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket {
@@ -13,14 +14,15 @@ namespace LottasFleaMarket {
    
         static void Main(string[] args) {
             
-            var numberOfBuyers = 50;
-            var numberOfSellers = 50;
+            var numberOfBuyers = 5;
+            var numberOfSellers = 5;
             var numberOfSellerBelongings = 20;
+            var startBalanceBuyers = 1000;
 
             var sellers = new List<Seller>();
             var buyers = new List<Buyer>();
 
-            PopulateSimulationWithSellersAndBuyers(numberOfBuyers, buyers, numberOfSellers, numberOfSellerBelongings, sellers);
+            PopulateSimulationWithSellersAndBuyers(numberOfBuyers, buyers, numberOfSellers, numberOfSellerBelongings, sellers, startBalanceBuyers);
 
             StartLoppemarked(sellers);
 
@@ -28,20 +30,29 @@ namespace LottasFleaMarket {
         }
 
         private static void PopulateSimulationWithSellersAndBuyers(int numberOfBuyers, List<Buyer> buyers, int numberOfSellers,
-            int numberOfSellerBelongings, List<Seller> sellers)
+            int numberOfSellerBelongings, List<Seller> sellers, int startBalanceBuyers)
         {
             Console.WriteLine("Buyers:");
-
+            Console.WriteLine();
             for (var i = 0; i < numberOfBuyers; i++)
             {
-                var buyer = new Buyer(1000);
-                buyers.Add(buyer);
+
+                buyers.Add(PersonFactory.BuyerBuilder()
+                    .WithStartBalance(startBalanceBuyers)
+                    .Build());
             }
+            
+            Console.WriteLine();
+            Console.WriteLine();
+            
+            Console.WriteLine("Sellers:");
+            Console.WriteLine();
 
             for (var i = 0; i < numberOfSellers; i++)
             {
-                Seller seller = new Seller(numberOfSellerBelongings);
-                sellers.Add(seller);
+                sellers.Add(PersonFactory.SellerBuilder(false)
+                    .WithNumberOfBelongings(numberOfSellerBelongings)
+                    .Build());
             }
         }
 
@@ -67,7 +78,7 @@ namespace LottasFleaMarket {
                 WaitHandle.WaitAll(waitHandles.ToArray());
                 Console.WriteLine($"All sellers have now sold it's #{loopCount++} batch");
             }
-
+            
             Console.WriteLine("Everything is sold");
         }
 
@@ -75,17 +86,33 @@ namespace LottasFleaMarket {
         {
             Console.WriteLine();
             Console.WriteLine();
-            
             Console.WriteLine("Statistic:");
+            
+            Console.WriteLine("Number of sellers: {0, -3}", sellers.Count);
+            Console.WriteLine("Number of buyers:  {0, -3}", buyers.Count);
+                
+            var sellerReports = new List<SellerReport>();
+            var buyerReports = new List<BuyerReport>();
+
+            buyers.ForEach(b => buyerReports.Add(b.GenerateReport() as BuyerReport));
+            sellers.ForEach(s => sellerReports.Add(s.GenerateReport() as SellerReport));
+            
+            Console.WriteLine();
+            Console.WriteLine();
+            
+            Console.WriteLine("Number of seller reports: {0, -3}", sellerReports.Count);
+            Console.WriteLine("Number of buyer reports:  {0, -3}", buyerReports.Count);
+            
+            Console.WriteLine();
             Console.WriteLine();
             
             Console.WriteLine("Sellers:");
             Console.WriteLine("");
-            Console.WriteLine("{0, -10} {1, -8} {2, -13} {3, -13} {4, -10}", "Name", "Smart","Items left", "Items Sold", "Total income");
+            Console.WriteLine("{0, -10} {1, -8} {2, -13} {3, -13} {4, -13} ", "Name", "Items left", "Items Sold", "Initial Value", "Total income");
             Console.WriteLine("--------------------------------------------------------------");
-            sellers.ForEach(s =>
+            sellerReports.ForEach(s =>
             {
-                Console.WriteLine("{0, -10} {1, -12} {2, -13} {3, -13} ${4, -10}", s.Name , s.IsSmart, s.NumberOfBelongings, s._NumberOfItemsSellerStartWith-s.NumberOfBelongings ,s.AmountSoldFor);
+                Console.WriteLine("{0, -14} {1, -10} {2, -13} ${3, -10} ${4 ,-13}", s.Owner.Name , s.Owner.NumberOfBelongings, s.ItemSold, s.InitialItemValue, s.MoneyMade );
                 
             });
             
@@ -93,11 +120,11 @@ namespace LottasFleaMarket {
             
             Console.WriteLine("Buyers:");
             Console.WriteLine();
-            Console.WriteLine("{0, -10} {1, -8} {2, -13} {3, -13} {4, -10}", "Name", "Smart","Items Bought", "Money spent", "Bank Saldo");
+            Console.WriteLine("{0, -10} {1, -13} {2, -13} {3, -13} {4, -13} ", "Name","Items Bought", "Initial Saldo", "Money spent", "Bank Saldo");
             Console.WriteLine("--------------------------------------------------------------");
-            buyers.ForEach(b =>
+            buyerReports.ForEach(b =>
             {
-                Console.WriteLine("{0, -10} {1, -12} {2,-12} ${3, -13} ${4, -10}", b.Name, b.IsSmart, b.NumberOfBelongings, b.AmountUsed, b.Balance);
+                Console.WriteLine("{0, -15} {1,-12} {2, -10} ${3, -10} ${4, -13} ", b.Owner.Name, b.StartBalance, b.ItemsBougth, b.MoneySpent, b.EndBalance);
                 
             });
             
