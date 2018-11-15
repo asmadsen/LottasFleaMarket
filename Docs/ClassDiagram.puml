@@ -137,7 +137,9 @@ namespace LottasFleaMarket {
             +void UnPublishItem(Seller seller, IItem item)
         }
         
-        Person o-- LottasFleaMarket.Decorators.Interfaces.IItem 
+        Person o-- LottasFleaMarket.Decorators.Interfaces.IItem
+         
+        Seller o-- Seller
         
         Market o-- Seller
         Market o-- LottasFleaMarket.Decorators.Interfaces.IItem 
