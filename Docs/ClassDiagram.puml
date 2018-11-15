@@ -1,42 +1,152 @@
 @startuml
+namespace LottasFleaMarket {
+    namespace Decorators {
+        namespace Interfaces {
+            interface IItem {
+                 +Guid Id
+                 +int SellerItemId
+                 +decimal Price
+                 +Category Category
+                 +Condition Condition
+             }
+         }
+         
+         abstract class AbstractItemDecorator implements LottasFleaMarket.Decorators.Interfaces.IItem {
+             #IItem _item
+             +Guid Id
+             +int SellerItemId
+             +decimal Price
+             +Category Category
+             +Condition Condition
+         }
+         
+         class BadConditionDecorator extends AbstractItemDecorator {
+             +decimal Price
+             +Condition Condition
+         }
+         
+         class CollectorsDecorator extends AbstractItemDecorator {
+             +decimal Price
+         }
+         
+         class RefurbishedDecorator extends AbstractItemDecorator {
+             +decimal Price
+             +Condition Condition
+         }
+         
+         AbstractItemDecorator o-- LottasFleaMarket.Decorators.Interfaces.IItem
+    }
 
-interface Observer {
-    +Void notify()
+    namespace Interfaces {
+        interface IMarketObserver {
+            +void OnNext(Seller seller, IItem item)
+        }
+    }
+    
+    namespace Models {
+        namespace Enums {
+            enum Category {
+                Fishing
+                Shoes
+                Nature
+            }
+            
+            enum Condition {
+                Used
+                Bad
+            }
+            
+            LottasFleaMarket.Decorators.Interfaces.IItem *-- Condition
+            LottasFleaMarket.Decorators.Interfaces.IItem *-- Category
+        }
+        
+        namespace Factories {
+            class PersonFactory<T extends Person> {
+                -{static} ISet<string> _usedNames
+                #string GenerateUniqueName()
+                #int NumberOfBelongingsToGenerate
+                #decimal StartBalance
+                +{static} PersonFactory<Seller> SellerBuilder(bool generateSubSellers)
+                +{static} PersonFactory<Buyer> BuyerBuilder()
+                +PersonFactory WithRandomBalance()
+                +PersonFactory WithBalance(decimal balance)
+                +PersonFactory WithRandomNumberOfBelongings()
+                +PersonFactory WithNumberOfBelongings(int numberOfBelongings)
+                +T Build()
+            }
+        }
+        
+        class Report {
+            +Person Owner
+            +decimal Balance
+            +decimal BelongingsCount
+        }
+        
+        class BuyerReport extends Report {
+            +int ItemsBought
+            +decimal MoneySpent
+        }
+        
+        class SellerReport extends Report {
+            +int ItemsSold
+            +decimal MoneyMade
+        }
+        
+        abstract class Person  {
+            +GUID id
+            +string name
+            #List<Item> Belongings
+            +int NumberOfBelongings
+            +decimal Balance
+            +{abstract} Report GenerateReport()
+        }
+        
+        class Buyer extends Person implements LottasFleaMarket.Interfaces.IMarketObserver {
+            +void OnNext(Seller seller, IItem item)
+            -void BuyItem(IItem item, Seller seller)
+            -bool IsInteresting(IItem item)
+            +BuyerReport GenerateReport()
+            +bool Equals(object obj)
+            +int GetHashCode()
+        }
+        
+        class Seller extends Person {
+            -List<Seller> _subSellers
+            +void PublishItem(int numberOfItemsToSell)
+            +Boolean BuyItem(Item item)
+            +SellerReport GenerateReport()
+        }
+        
+        class Item implements LottasFleaMarket.Decorators.Interfaces.IItem {
+             +Guid Id
+             +int SellerItemId
+             +decimal Price
+             +Category Category
+             +Condition Condition
+        }
+        
+        
+        class Market << (S,#FF7700) Singleton>> implements System.IObservable {
+            -{static} object _singletonLock
+            -{static} Market _instance
+            -Set<Observer> observers
+            -Map<Seller, ISet<IItem>> _itemsForSale
+            +{static} Market GetInstance()
+            +void PublishItem(Seller seller, IItem item)
+            +void Observe(IMarketObserver observer)
+            +void UnPublishItem(Seller seller, IItem item)
+        }
+        
+        Person o-- LottasFleaMarket.Decorators.Interfaces.IItem 
+        
+        Market o-- Seller
+        Market o-- LottasFleaMarket.Decorators.Interfaces.IItem 
+        Market o-- LottasFleaMarket.Interfaces.IMarketObserver   
+    }
 }
 
-abstract class Person {
-    +GUID id
-    +String name
-    #List<Item> belongings
-    #Decimal money
+interface System.IObservable<T> {
+    +IDisposable Subscribe(T observer)
 }
-
-class Buyer extends Person implements Observer {
-    +Void BuyItemsOnMarket
-}
-
-class Seller extends Person {
-    +Void PublishItem()
-    +Boolean BuyItem(Item item)
-}
-
-class Item {
-    +GUID id
-    +Decimal price
-}
-
-
-class Market {
-    -Set<Observer> observers
-    +Map<Seller, List<Item>> itemsForSale
-    +{static} Market GetInstance()
-    +void PublishItem(Item item)
-}
-
-Person o-- Item 
-
-Market o-- Seller 
-Market o-- Item 
-Market o-- Observer 
 
 @enduml

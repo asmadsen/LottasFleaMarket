@@ -11,7 +11,7 @@ namespace LottasFleaMarket.Models {
 
 
         public Buyer(decimal balance) : base(balance) {
-            Market.GetInstance().Observe(this);
+            Market.GetInstance().Subscribe(this);
         }
 
         public void OnNext(Seller seller, IItem item) {

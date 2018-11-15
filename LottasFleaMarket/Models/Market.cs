@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models {
-    public class Market {
+    public class Market{
         private static readonly object _singletonLock = new object();
         private static Market _market;
         private ISet<IMarketObserver> _observers = new HashSet<IMarketObserver>();
@@ -52,7 +52,7 @@ namespace LottasFleaMarket.Models {
             }).Start());
         }
 
-        public void Observe(IMarketObserver observer) {
+        public IDisposable Subscribe(IMarketObserver observer) {
             if (_itemsForSale.Count > 0) {
                 foreach (var (seller, items) in _itemsForSale) {
                     foreach (var item in items) {
@@ -61,6 +61,7 @@ namespace LottasFleaMarket.Models {
                 }
             }
             _observers.Add(observer);
+            IDisposable
         }
 
         public void UnPublishItem(Seller seller, IItem item) {
@@ -69,5 +70,6 @@ namespace LottasFleaMarket.Models {
                 items.Remove(item);
             }
         }
+
     }
 }

@@ -8,5 +8,6 @@ namespace LottasFleaMarket.Interfaces.Decorators {
         decimal Price { get; }
         string Description { get; }
         Category Category { get; }
+        Condition Condition { get; }
     }
 }
