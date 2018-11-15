@@ -4,14 +4,13 @@ using LottasFleaMarket.Interfaces;
 using LottasFleaMarket.Interfaces.Decorators;
 
 namespace LottasFleaMarket.Models {
-    public class Buyer : Person, IMarketObserver
-    {
-
+    public class Buyer : Person, IMarketObserver {
+        private readonly Action _unSubscribe;
         public decimal AmountUsed { get; protected set; }
 
 
         public Buyer(decimal saldo) : base(saldo) {
-            Market.GetInstance().Observe(this);
+            _unSubscribe = Market.GetInstance().Subscribe(this);
         }
 
         public void OnNext(Seller seller, IItem item) {
@@ -23,6 +22,10 @@ namespace LottasFleaMarket.Models {
             {
                 //Thread.Sleep(new Random().Next(100, 200));
                 BuyItem(item, seller);
+            }
+
+            if (Saldo == 0) {
+                _unSubscribe();
             }
         }
 

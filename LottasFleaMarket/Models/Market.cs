@@ -52,7 +52,7 @@ namespace LottasFleaMarket.Models {
             }).Start());
         }
 
-        public void Observe(IMarketObserver observer) {
+        public Action Subscribe(IMarketObserver observer) {
             if (_itemsForSale.Count > 0) {
                 foreach (var (seller, items) in _itemsForSale) {
                     foreach (var item in items) {
@@ -61,6 +61,12 @@ namespace LottasFleaMarket.Models {
                 }
             }
             _observers.Add(observer);
+
+            return () => {
+                if (_observers.Contains(observer)) {
+                    _observers.Remove(observer);
+                }
+            };
         }
 
         public void UnPublishItem(Seller seller, IItem item) {
