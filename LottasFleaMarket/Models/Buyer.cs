@@ -31,7 +31,7 @@ namespace LottasFleaMarket.Models {
             }
         }
 
-        private void BuyItem(IItem item, Seller seller)
+        public void BuyItem(IItem item, Seller seller)
         {
             const string tabs = "                    ";
             Console.WriteLine($"{tabs}{Name} bought {seller.Name}'s #{item.SellerItemId} for ${String.Format("{0:0.00}", item.Price)}");
