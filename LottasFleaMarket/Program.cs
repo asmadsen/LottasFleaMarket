@@ -10,7 +10,7 @@ using LottasFleaMarket.Models.Factories;
 using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket {
-    class Program {
+    public class Program {
    
         static void Main(string[] args) {
             
@@ -29,7 +29,7 @@ namespace LottasFleaMarket {
             printStatistics(sellers, buyers);
         }
 
-        private static void PopulateSimulationWithSellersAndBuyers(int numberOfBuyers, List<Buyer> buyers, int numberOfSellers,
+        public static void PopulateSimulationWithSellersAndBuyers(int numberOfBuyers, List<Buyer> buyers, int numberOfSellers,
             int numberOfSellerBelongings, List<Seller> sellers, int startBalanceBuyers)
         {
             Console.WriteLine("Buyers:");
@@ -56,7 +56,7 @@ namespace LottasFleaMarket {
             }
         }
 
-        private static void StartLoppemarked(List<Seller> sellers)
+        public static void StartLoppemarked(List<Seller> sellers)
         {
             var loopCount = 1;
             while (sellers.Any(seller => seller.HasMoreNotListedItems))

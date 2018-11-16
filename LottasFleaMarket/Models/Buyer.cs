@@ -22,7 +22,6 @@ namespace LottasFleaMarket.Models {
             {
             if (!seller.BuyItem(item)) return;
             
-            
                 //Thread.Sleep(new Random().Next(100, 200));
                 BuyItem(item, seller);
             }
