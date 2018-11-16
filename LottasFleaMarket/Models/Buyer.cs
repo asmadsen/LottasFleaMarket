@@ -44,7 +44,7 @@ namespace LottasFleaMarket.Models {
 
         public bool IsInteresting(IItem item)
         {
-            decimal listingPrice = item.Category.Price;
+            /*decimal listingPrice = item.Category.Price;*/
             
             lock (this) {
                 if (Balance < item.Price) return false;

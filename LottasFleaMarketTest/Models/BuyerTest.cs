@@ -4,21 +4,20 @@ using Xunit;
 using LottasFleaMarket.Models;
 using LottasFleaMarket.Decorators;
 using LottasFleaMarket.Interfaces.Decorators;
+using LottasFleaMarket.Models.Factories;
 
 namespace LottasFleaMarketTest.Models
 {
     public class BuyerTest
     {
-        /*[Fact]
+        [Fact]
         public void shouldFindItemIntersting()
         {
             Item item = new Item(1);
-            var Buyer = new Buyer(400);
+            var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(400).Build();
             var CollectorsDecoratorItem = new CollectorsDecorator(item);
 
-            var i = (IItem) CollectorsDecoratorItem;
-
-            Assert.Equal(Buyer.IsInteresting(i), true);
+            Assert.True(Buyer.IsInteresting(CollectorsDecoratorItem));
 
         }
         
@@ -26,60 +25,11 @@ namespace LottasFleaMarketTest.Models
         public void shouldFindItemNOTInterestingBecauseOfLackOfMoney()
         {
             Item item = new Item(1);
-            var Buyer = new Buyer(1);
+            var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(10).Build();
             var CollectorsDecoratorItem = new CollectorsDecorator(item);
 
-            var i = (IItem) CollectorsDecoratorItem;
-
-            var isInt = Buyer.IsInteresting(i);
-
-            Assert.Equal(Buyer.IsInteresting(i), false);
+            Assert.False(Buyer.IsInteresting(CollectorsDecoratorItem));
 
         }
-        
-        [Fact]
-        public void shouldFindItemInterstingBecauseNOTSmart()
-        {
-            Item item = new Item(1);
-            var Buyer = new Buyer(100);
-            Buyer.IsSmart = false;
-            
-            var CollectorsDecoratorItem = new CollectorsDecorator(item);
-
-            var i = (IItem) CollectorsDecoratorItem;
-
-            Assert.Equal(Buyer.IsInteresting(i), true);
-        }
-        
-        [Fact]
-        public void shouldFindItemNOTInterstingBecauseNOTSmartButNoMoney()
-        {
-            Item item = new Item(1);
-            var Buyer = new Buyer(0);
-            Buyer.IsSmart = false;
-            
-            var CollectorsDecoratorItem = new CollectorsDecorator(item);
-
-            var i = (IItem) CollectorsDecoratorItem;
-
-            Assert.Equal(Buyer.IsInteresting(i), false);
-        }
-        
-        [Fact]
-        public void shouldFindItemInterstingBecausePriceIsUnderListingPrice()
-        {
-            Item item = new Item(1);
-            var CollectorsDecoratorItem = new CollectorsDecorator(item);
-            decimal listingPrice = CollectorsDecoratorItem.Category.Price;
-            decimal price = CollectorsDecoratorItem.Price;
-            
-            var Buyer = new Buyer(100);
-            Buyer.IsSmart = true;
-       
-            var i = (IItem) CollectorsDecoratorItem;
-
-            Assert.Equal(Buyer.IsInteresting(i), true);
-        }
-    }*/
     }
 }
