@@ -26,14 +26,13 @@ namespace LottasFleaMarket {
 
             StartLoppemarked(sellers);
 
-            printStatistics(sellers, buyers);
+            PrintStatistics(sellers, buyers);
         }
 
         public static void PopulateSimulationWithSellersAndBuyers(int numberOfBuyers, List<Buyer> buyers, int numberOfSellers,
             int numberOfSellerBelongings, List<Seller> sellers, int startBalanceBuyers)
         {
-            Console.WriteLine("Buyers:");
-            Console.WriteLine();
+       
             for (var i = 0; i < numberOfBuyers; i++)
             {
 
@@ -42,11 +41,6 @@ namespace LottasFleaMarket {
                     .Build());
             }
             
-            Console.WriteLine();
-            Console.WriteLine();
-            
-            Console.WriteLine("Sellers:");
-            Console.WriteLine();
 
             for (var i = 0; i < numberOfSellers; i++)
             {
@@ -82,7 +76,7 @@ namespace LottasFleaMarket {
             Console.WriteLine("Everything is sold");
         }
 
-        private static void printStatistics(List<Seller> sellers, List<Buyer> buyers)
+        private static void PrintStatistics(List<Seller> sellers, List<Buyer> buyers)
         {
             Console.WriteLine();
             Console.WriteLine();

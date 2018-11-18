@@ -13,7 +13,7 @@ namespace LottasFleaMarketTest.Models
     public class BuyerTest
     {
         [Fact]
-        public void shouldFindItemIntersting()
+        public void ShouldFindItemIntersting()
         {
             Item item = new Item(1);
             var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(400).Build();
@@ -24,7 +24,7 @@ namespace LottasFleaMarketTest.Models
         }
 
         [Fact]
-        public void shouldHavePriceOfBougthItemLessInBalance()
+        public void ShouldHavePriceOfBougthItemLessInBalance()
         {
             int startBalance = 100;
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
@@ -39,7 +39,7 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void cannotBuyItemThatCostsMoreThanBalance()
+        public void CannotBuyItemThatCostsMoreThanBalance()
         {
             IItem item = new Item(1);
             int startBalance = (int)item.Price - 1;
@@ -52,7 +52,7 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void canBuyItemThatCostsSameAsBalance()
+        public void CanBuyItemThatCostsSameAsBalance()
         {
             IItem item = new Item(1);
             int startBalance = (int)item.Price;
@@ -65,7 +65,7 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void shouldFindItemNOTInterestingBecauseOfLackOfMoney()
+        public void ShouldFindItemNOTInterestingBecauseOfLackOfMoney()
         {
             Item item = new Item(1);
             var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(10).Build();
@@ -76,7 +76,7 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void shouldHaveOneMoreItemAfterBuying()
+        public void ShouldHaveOneMoreItemAfterBuying()
         {
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
             var Buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build();
@@ -89,7 +89,7 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void noBuyersIsEqualToEachOther()
+        public void NoBuyersIsEqualToEachOther()
         {
             var listOfBuyers = new List<Buyer>();
 

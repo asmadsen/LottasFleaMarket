@@ -12,7 +12,7 @@ namespace LottasFleaMarketTest
     {
 
         [Fact]
-        public void noPersonHasTheSameName()
+        public void NoPersonHasTheSameName()
         {
             var numberOfBuyers = 1500;
             var numberOfSellers = 1500;
@@ -35,7 +35,7 @@ namespace LottasFleaMarketTest
         
         
         [Fact]
-        public void numberOfBelongingsHasNotChangedAfterDuringSimulation()
+        public void NumberOfBelongingsHasNotChangedAfterDuringSimulation()
         {
             var numberOfBuyers = 50;
             var numberOfSellers = 5;
@@ -58,7 +58,7 @@ namespace LottasFleaMarketTest
         }
         
         [Fact]
-        public void noBuyersHasNegativeBalance()
+        public void NoBuyersHasNegativeBalance()
         {
             var numberOfBuyers = 10;
             var numberOfSellers = 30;
