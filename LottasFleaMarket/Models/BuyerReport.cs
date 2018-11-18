@@ -4,13 +4,13 @@ namespace LottasFleaMarket.Models
 {
     public class BuyerReport : Report
     {
-        public int ItemsBougth;
+        public int ItemsBought;
         public decimal MoneySpent;
 
-        public BuyerReport(Person owner, int itemsBougth, decimal moneySpent) 
+        public BuyerReport(Person owner, int itemsBought, decimal moneySpent) 
             : base(owner)
         {
-            ItemsBougth = itemsBougth;
+            ItemsBought = itemsBought;
             MoneySpent = moneySpent;
         }
     }

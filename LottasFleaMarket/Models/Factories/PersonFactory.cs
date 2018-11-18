@@ -21,42 +21,42 @@ namespace LottasFleaMarket.Models.Factories
         public class PersonBuilder<T> where T : Person
         {
             private bool _generateSubSellers;
-            private static Faker _Faker = new Faker();
+            private static Faker _faker = new Faker();
             private static ISet<string> _usedNames = new HashSet<string>();
-            private int _NumberOfBelongingsToGenerate;
-            private decimal _DecimalStartBalance;
+            private int _numberOfBelongingsToGenerate;
+            private decimal _decimalStartBalance;
             private ThreadSafeRandom _random = new ThreadSafeRandom();
 
             internal PersonBuilder(int numberOfBelongingsToGenerate, decimal decimalStartBalance, bool generateSubSellers = false)
             {
                 _generateSubSellers = generateSubSellers;
-                _NumberOfBelongingsToGenerate = numberOfBelongingsToGenerate;
-                _DecimalStartBalance = decimalStartBalance;
+                _numberOfBelongingsToGenerate = numberOfBelongingsToGenerate;
+                _decimalStartBalance = decimalStartBalance;
             }
     
             
             
             public PersonBuilder<T> WithRandomBalance()
             {
-                _DecimalStartBalance = _random.Next(50, 1000);
+                _decimalStartBalance = _random.Next(50, 1000);
                 return this;
             }
             
-            public PersonBuilder<T> WithStartBalance(int Balance)
+            public PersonBuilder<T> WithStartBalance(decimal balance)
             {
-                _DecimalStartBalance = Balance;
+                _decimalStartBalance = balance;
                 return this;
             }
             
             public PersonBuilder<T> WithRandomOfBelongings()
             {
-                _NumberOfBelongingsToGenerate = _random.Next(10, 100);
+                _numberOfBelongingsToGenerate = _random.Next(10, 100);
                 return this;
             }
             
-            public PersonBuilder<T> WithNumberOfBelongings(int NumberOfBelongings)
+            public PersonBuilder<T> WithNumberOfBelongings(int numberOfBelongings)
             {
-                _NumberOfBelongingsToGenerate = NumberOfBelongings;
+                _numberOfBelongingsToGenerate = numberOfBelongings;
                 return this;
             }
     
@@ -64,9 +64,9 @@ namespace LottasFleaMarket.Models.Factories
             {
                 if (typeof(T) == typeof(Seller))
                 {
-                    return new Seller(MakeBelongings(_NumberOfBelongingsToGenerate), _DecimalStartBalance, GenerateUniqueName()) as T;
+                    return new Seller(MakeBelongings(_numberOfBelongingsToGenerate), _decimalStartBalance, GenerateUniqueName()) as T;
                 }
-                return new Buyer(_DecimalStartBalance, GenerateUniqueName()) as T;
+                return new Buyer(_decimalStartBalance, GenerateUniqueName()) as T;
             }
             
             private string GenerateUniqueName()
@@ -76,7 +76,7 @@ namespace LottasFleaMarket.Models.Factories
                 {
                     string name;
                     do {
-                        name = _Faker.Name.FirstName();
+                        name = _faker.Name.FirstName();
                     } while (_usedNames.Contains(name));
     
                     _usedNames.Add(name);
@@ -88,10 +88,10 @@ namespace LottasFleaMarket.Models.Factories
             {
                 ISet<IItem> set = new HashSet<IItem>();
                 
-                for (int i = 0; i < numberOfBelongingsToGenerate; i++)
+                for (var i = 0; i < numberOfBelongingsToGenerate; i++)
                 {
                     IItem item = new Item(i+1);
-                    int rand = _random.Next(0, 100);
+                    var rand = _random.Next(0, 100);
                     
                     {
                         switch (rand)

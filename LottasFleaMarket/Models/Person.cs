@@ -21,6 +21,7 @@ namespace LottasFleaMarket.Models
             Id = Guid.NewGuid();
             Name = name;
             Balance = balance;
+            InitialBalance = balance;
         
             if (belongings != null)
             {
