@@ -65,7 +65,7 @@ namespace LottasFleaMarket.Utils {
                     .Select(_null => buyerBuilder.Build()).ToList();
                 
                 
-                var sellerBuilder = PersonFactory.SellerBuilder(true)
+                var sellerBuilder = PersonFactory.SellerBuilder(false)
                     .WithNumberOfBelongings(_numberOfSellerBelongings);
 
                 sellers = new string[_numberOfSellers]

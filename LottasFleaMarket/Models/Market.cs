@@ -50,7 +50,7 @@ namespace LottasFleaMarket.Models {
             var items = _itemsForSale.GetValueOrDefault(seller);
             items.Add(item);
 
-            
+       
             _observers.ToList().ForEach(observer => new Thread(() => {
                 observer.OnNext(seller, item);
             }).Start());

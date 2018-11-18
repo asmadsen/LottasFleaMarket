@@ -13,9 +13,12 @@ namespace LottasFleaMarket {
     public class Program {
    
         static void Main(string[] args) {
-            var simulation = new Simulation();
+            var simulation = new Simulation(20, 20, 5);
             
             simulation.StartSimulation();
+
+            Console.WriteLine("Press enter key to exit");
+            Console.ReadLine();
         }
     }
 }

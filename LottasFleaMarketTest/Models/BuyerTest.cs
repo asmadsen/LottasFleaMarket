@@ -11,7 +11,7 @@ using LottasFleaMarket.Models.Factories;
 
 namespace LottasFleaMarketTest.Models
 {
-    public class BuyerTest : IDisposable
+    public class BuyerTest
     {
         [Fact]
         public void ShouldFindItemInteresting()
@@ -118,10 +118,6 @@ namespace LottasFleaMarketTest.Models
             var num = listOfBuyers.Distinct().Count();
             
             Assert.Equal(1, num);
-        }
-
-        public void Dispose() {
-            Market.ResetMarket();
         }
     }
 }
