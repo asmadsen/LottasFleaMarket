@@ -3,6 +3,7 @@ using System.Threading;
 using LottasFleaMarket.Interfaces;
 using LottasFleaMarket.Interfaces.Decorators;
 using LottasFleaMarket.Models.Enums;
+using LottasFleaMarket.Utils;
 
 namespace LottasFleaMarket.Models {
     public class Buyer : Person, IMarketObserver {
@@ -21,14 +22,15 @@ namespace LottasFleaMarket.Models {
             lock (this)
             {
             if (!seller.BuyItem(item)) return;
-            
-                //Thread.Sleep(new Random().Next(100, 200));
+                
+                Thread.Sleep(new ThreadSafeRandom().Next(100, 500));
                 BuyItem(item, seller);
             }
 
             if (Balance == 0) {
                 _unSubscribe();
             }
+            
         }
 
         public void BuyItem(IItem item, Seller seller)
