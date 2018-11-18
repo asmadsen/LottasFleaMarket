@@ -7,8 +7,8 @@ using LottasFleaMarket.Models.Factories;
 
 namespace LottasFleaMarket.Utils {
     public class Simulation {
-        private static object _runningCheckLock = new object();
-        private static bool _runningSimulation = false;
+        public static object RunningCheckLock = new object();
+        public static bool RunningSimulation = false;
         private bool _isCurrentlyRunning = false;
         
         private int _numberOfBuyers;
@@ -54,8 +54,8 @@ namespace LottasFleaMarket.Utils {
             IsRunningCheck();
             List<Seller> sellers;
             List<Buyer> buyers;
-            lock (_runningCheckLock) {
-                _runningSimulation = true;
+            lock (RunningCheckLock) {
+                RunningSimulation = true;
                 _isCurrentlyRunning = true;
 
                 var buyerBuilder = PersonFactory.BuyerBuilder()
@@ -91,7 +91,7 @@ namespace LottasFleaMarket.Utils {
                 }
 
                 _isCurrentlyRunning = false;
-                _runningSimulation = false;
+                RunningSimulation = false;
                 Console.WriteLine("Everything is sold");
             }
             PrintStatistics(sellers, buyers);
@@ -143,8 +143,8 @@ namespace LottasFleaMarket.Utils {
         }
 
         private static void IsRunningCheck() {
-            lock (_runningCheckLock) {
-                if (_runningSimulation) {
+            lock (RunningCheckLock) {
+                if (RunningSimulation) {
                     throw new Exception("Cannot finish the current action because of an running simulation");
                 }
             }

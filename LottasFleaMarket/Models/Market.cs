@@ -27,6 +27,16 @@ namespace LottasFleaMarket.Models {
             }
         }
 
+        public static void ResetMarket() {
+            lock (_singletonLock) {
+                lock (Simulation.RunningCheckLock) {
+                    if (!Simulation.RunningSimulation) {
+                        _market = null;
+                    }
+                }
+            }
+        }
+
         public void PublishItem(Seller seller, IItem item) {
             
             lock (this) {

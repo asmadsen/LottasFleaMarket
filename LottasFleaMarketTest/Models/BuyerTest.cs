@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -10,68 +11,68 @@ using LottasFleaMarket.Models.Factories;
 
 namespace LottasFleaMarketTest.Models
 {
-    public class BuyerTest
+    public class BuyerTest : IDisposable
     {
         [Fact]
-        public void ShouldFindItemIntersting()
+        public void ShouldFindItemInteresting()
         {
-            Item item = new Item(1);
-            var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(400).Build();
-            var CollectorsDecoratorItem = new CollectorsDecorator(item);
+            var item = new Item(1);
+            var buyer = PersonFactory.BuyerBuilder().WithStartBalance(400).Build();
+            var collectorsDecoratorItem = new CollectorsDecorator(item);
 
-            Assert.True(Buyer.IsInteresting(CollectorsDecoratorItem));
+            Assert.True(buyer.IsInteresting(collectorsDecoratorItem));
 
         }
 
         [Fact]
-        public void ShouldHavePriceOfBougthItemLessInBalance()
+        public void ShouldHavePriceOfBoughtItemLessInBalance()
         {
-            int startBalance = 100;
+            var startBalance = 100;
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
-            var Buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
+            var buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
 
             IItem item = new Item(1);
-            decimal itemPrice = item.Price;
+            var itemPrice = item.Price;
             
-            Buyer.BuyItem(item, seller);
+            buyer.BuyItem(item, seller);
             
-            Assert.Equal(startBalance-itemPrice, Buyer.Balance);
+            Assert.Equal(startBalance-itemPrice, buyer.Balance);
         }
         
         [Fact]
         public void CannotBuyItemThatCostsMoreThanBalance()
         {
             IItem item = new Item(1);
-            int startBalance = (int)item.Price - 1;
+            var startBalance = (int)item.Price - 1;
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
-            var Buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
+            var buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
             
-            if(Buyer.IsInteresting(item))  Buyer.BuyItem(item, seller);
+            if(buyer.IsInteresting(item))  buyer.BuyItem(item, seller);
             
-            Assert.Equal(0, Buyer.NumberOfItemsBought);
+            Assert.Equal(0, buyer.NumberOfItemsBought);
         }
         
         [Fact]
         public void CanBuyItemThatCostsSameAsBalance()
         {
             IItem item = new Item(1);
-            int startBalance = (int)item.Price;
+            var startBalance = (int)item.Price;
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
-            var Buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
+            var buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(startBalance).Build();
             
-            if(Buyer.IsInteresting(item))  Buyer.BuyItem(item, seller);
+            if(buyer.IsInteresting(item))  buyer.BuyItem(item, seller);
             
-            Assert.Equal(1, Buyer.NumberOfItemsBought);
+            Assert.Equal(1, buyer.NumberOfItemsBought);
         }
         
         [Fact]
-        public void ShouldFindItemNOTInterestingBecauseOfLackOfMoney()
+        public void ShouldFindItemNotInterestingBecauseOfLackOfMoney()
         {
-            Item item = new Item(1);
-            var Buyer = PersonFactory.BuyerBuilder().WithStartBalance(10).Build();
-            var CollectorsDecoratorItem = new CollectorsDecorator(item);
+            var item = new Item(1);
+            var buyer = PersonFactory.BuyerBuilder().WithStartBalance(10).Build();
+            var collectorsDecoratorItem = new CollectorsDecorator(item);
 
-            Assert.False(Buyer.IsInteresting(CollectorsDecoratorItem));
+            Assert.False(buyer.IsInteresting(collectorsDecoratorItem));
 
         }
         
@@ -79,13 +80,13 @@ namespace LottasFleaMarketTest.Models
         public void ShouldHaveOneMoreItemAfterBuying()
         {
             var seller = PersonFactory.SellerBuilder(false).WithRandomBalance().Build();
-            var Buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build();
+            var buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build();
 
             IItem item = new Item(1);
             
-            Buyer.BuyItem(item, seller);
+            buyer.BuyItem(item, seller);
             
-            Assert.Equal(1, Buyer.Belongings.Count);
+            Assert.Equal(1, buyer.Belongings.Count);
         }
         
         [Fact]
@@ -93,7 +94,7 @@ namespace LottasFleaMarketTest.Models
         {
             var listOfBuyers = new List<Buyer>();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 listOfBuyers.Add(PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build());    
             }
@@ -104,12 +105,12 @@ namespace LottasFleaMarketTest.Models
         }
         
         [Fact]
-        public void BuyersisDuplicate()
+        public void BuyersIsDuplicate()
         {
             var listOfBuyers = new List<Buyer>();
-            Buyer buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build();
+            var buyer = PersonFactory.BuyerBuilder().WithNumberOfBelongings(0).WithStartBalance(100).Build();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 listOfBuyers.Add(buyer);    
             }
@@ -117,6 +118,10 @@ namespace LottasFleaMarketTest.Models
             var num = listOfBuyers.Distinct().Count();
             
             Assert.Equal(1, num);
+        }
+
+        public void Dispose() {
+            Market.ResetMarket();
         }
     }
 }
