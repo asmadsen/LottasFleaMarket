@@ -22,9 +22,9 @@ namespace LottasFleaMarket.Models {
             lock (this)
             {
             if (!seller.BuyItem(item)) return;
-                
-                Thread.Sleep(new ThreadSafeRandom().Next(100, 500));
                 BuyItem(item, seller);
+                 
+                Thread.Sleep(new ThreadSafeRandom().Next(100, 500));
             }
 
             if (Balance == 0) {
