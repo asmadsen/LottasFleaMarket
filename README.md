@@ -96,3 +96,16 @@ the solution we feel that we have gotten a lot of things right. This might be be
 patterns, and it seem that GRASP come for free when following the different patterns.
 GRASP feels mostly like common sense, in that code that follows the GRASP guidelines is easy to read and
 make sense of, and vise-versa; that meaningful and easy to read code often follows most GRASP guidelines.
+
+##Unit Testing
+We have covered much of the application with unit tests. We tried to make unit test as we wrote the methods and
+application logic. This vas valuable as we implemented thread locks and other complex logic. E.g. no items
+were allowed to be sold twice. To make sure that our logic worked we have a check that make sure that
+all items owned by all buyers is distinct and that number of items simlulation started 
+is equal to number simulation ends with.
+Other unit test checks if no buyers has negative balanance after the simluatin, no persons has the same name,
+that a buyer can't buy if item price is higher than belance etc. 
+We wanted to make unit tests that did check what to exam described the application to fulfill.
+
+
+ 
